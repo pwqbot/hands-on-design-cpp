@@ -1,0 +1,15 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 80
+
+Language: Cpp 
+Standard: c++20
+AlignOperands: true 
+AllowShortLambdasOnASingleLine: None
+AllowShortFunctionsOnASingleLine: None
+AlignTrailingComments: true
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignConsecutiveDeclarations: Consecutive
+AlignConsecutiveAssignments: Consecutive
+EmptyLineBeforeAccessModifier: Always
