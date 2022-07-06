@@ -13,3 +13,5 @@ AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 AlignConsecutiveDeclarations: Consecutive
 AlignConsecutiveAssignments: Consecutive
 EmptyLineBeforeAccessModifier: Always
+AlwaysBreakTemplateDeclarations: Yes
+SpaceAfterTemplateKeyword: true
