@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdarg.h>
 
+// ============================================================================
+//                      different types, same number
 void f(int i) {
     std::cout << "f(int)" << std::endl;
 }
@@ -18,9 +20,11 @@ void CallF() {
     f(5l);   // f(long)
     f(5.0);  // f(double)
     f(5.0f); // f(double)
-    // f(5u);   // ambiguous
+    // f(5u);   // ambiguous between signed int and signed long
 }
 
+// ============================================================================
+//                           different number
 void g(long i, long j) {
     std::cout << "g(long, long)" << std::endl;
 }
@@ -40,6 +44,8 @@ void CallG() {
     // f(5, 5l);  // amnbiguous
 }
 
+// ============================================================================
+//                          default parameter
 void h(int i) {
     std::cout << "h(int)" << std::endl;
 }
@@ -57,10 +63,12 @@ void CallH() {
     h(5l, 5); // h(long, long)
     // h(5, 5);  // ambiguous: h(long, long) vs h(double, double = 0)
     h(5.0);  // h(double, double)
-    h(5.0f); // h(double, double)
+    h(5.0f); // h(double, double) float to double is better than int
     // h(5l);    // ambiguous: h(long, long) vs h(double, double = 0)
 }
 
+// ============================================================================
+//                          tempalte function
 void d(int i) {
     std::cout << "d(int)" << std::endl;
 }
@@ -74,11 +82,13 @@ template <typename T> void d(T i) {
 }
 
 void CalD() {
-    d(5);   // d(int)
+    d(5);   // d(int), exact match to non-template function is best
     d(5l);  // d(long)
-    d(5.0); // d(T)
+    d(5.0); // d(T), not exact match, template instantiated
 }
 
+// ============================================================================
+//                          multiple template
 void w(int i) {
     std::cout << "w(int)" << std::endl;
 }
@@ -87,6 +97,7 @@ template <typename T> void w(T i) {
     std::cout << "w(T)" << std::endl;
 }
 
+// harder to instantiate
 template <typename T> void w(T *i) {
     std::cout << "w(T*)" << std::endl;
 }
@@ -95,9 +106,11 @@ void CalW() {
     w(5);  // w(int)
     w(5l); // w(T)
     int i = 0;
-    w(&i); // w(T*)
+    w(&i); // w(T*), more specific
 }
 
+// ============================================================================
+//                          variable arguments
 void s(int i) {
     std::cout << "s(int)" << std::endl;
 }
