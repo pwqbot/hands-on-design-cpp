@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdarg.h>
+#include <type_traits>
 
 // ============================================================================
 //                      different types, same number
@@ -77,7 +78,8 @@ void d(long i) {
     std::cout << "d(long)" << std::endl;
 }
 
-template <typename T> void d(T i) {
+template <typename T>
+void d(T i) {
     std::cout << "d(T)" << std::endl;
 }
 
@@ -93,12 +95,14 @@ void w(int i) {
     std::cout << "w(int)" << std::endl;
 }
 
-template <typename T> void w(T i) {
+template <typename T>
+void w(T i) {
     std::cout << "w(T)" << std::endl;
 }
 
 // harder to instantiate
-template <typename T> void w(T *i) {
+template <typename T>
+void w(T *i) {
     std::cout << "w(T*)" << std::endl;
 }
 
@@ -138,6 +142,11 @@ void CalS() {
     X x;
     s(x); // s(...)
 }
+
+struct A {
+    void sort();
+    int  x;
+};
 
 int main() {
     CalS();
