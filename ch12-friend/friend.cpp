@@ -1,5 +1,3 @@
-
-
 namespace NON_TEMPLATE {
 
 class C1 {
