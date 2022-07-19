@@ -1,5 +1,5 @@
+#include <cstdarg>
 #include <iostream>
-#include <stdarg.h>
 #include <type_traits>
 
 // ============================================================================
@@ -8,7 +8,7 @@ void f(int i) {
     std::cout << "f(int)" << std::endl;
 }
 
-void f(long i) {
+void f(long i) { // NOLINT
     std::cout << "f(long)" << std::endl;
 }
 
@@ -18,15 +18,15 @@ void f(double i) {
 
 void CallF() {
     f(5);    // f(int)
-    f(5l);   // f(long)
+    f(5L);   // f(long)
     f(5.0);  // f(double)
-    f(5.0f); // f(double)
+    f(5.0F); // f(double)
     // f(5u);   // ambiguous between signed int and signed long
 }
 
 // ============================================================================
 //                           different number
-void g(long i, long j) {
+void g(long i, long j) { // NOLINT
     std::cout << "g(long, long)" << std::endl;
 }
 
@@ -40,7 +40,7 @@ void g(double i) {
 
 void CallG() {
     g(5, 5);   // f(int, int)
-    g(5l, 5l); // f(long, long)
+    g(5L, 5L); // f(long, long)
     g(5, 5.0); // f(int, int) needs one conversion, f(long, long) needs two
     // f(5, 5l);  // amnbiguous
 }
@@ -51,7 +51,7 @@ void h(int i) {
     std::cout << "h(int)" << std::endl;
 }
 
-void h(long i, long j) {
+void h(long i, long j) { // NOLINT
     std::cout << "f(long, long)" << std::endl;
 }
 
@@ -61,10 +61,10 @@ void h(double i, double j = 0) {
 
 void CallH() {
     h(5);     // h(int)
-    h(5l, 5); // h(long, long)
+    h(5L, 5); // h(long, long)
     // h(5, 5);  // ambiguous: h(long, long) vs h(double, double = 0)
     h(5.0);  // h(double, double)
-    h(5.0f); // h(double, double) float to double is better than int
+    h(5.0F); // h(double, double) float to double is better than int
     // h(5l);    // ambiguous: h(long, long) vs h(double, double = 0)
 }
 
@@ -74,7 +74,7 @@ void d(int i) {
     std::cout << "d(int)" << std::endl;
 }
 
-void d(long i) {
+void d(long i) { // NOLINT
     std::cout << "d(long)" << std::endl;
 }
 
@@ -85,7 +85,7 @@ void d(T i) {
 
 void CalD() {
     d(5);   // d(int), exact match to non-template function is best
-    d(5l);  // d(long)
+    d(5L);  // d(long)
     d(5.0); // d(T), not exact match, template instantiated
 }
 
@@ -108,7 +108,7 @@ void w(T *i) {
 
 void CalW() {
     w(5);  // w(int)
-    w(5l); // w(T)
+    w(5L); // w(T)
     int i = 0;
     w(&i); // w(T*), more specific
 }
@@ -135,7 +135,7 @@ void s(...) {
 
 void CalS() {
     s(5);   // s(int)
-    s(5l);  // s(int)
+    s(5L);  // s(int)
     s(5.0); // s(int)
 
     struct X {};
@@ -148,6 +148,6 @@ struct A {
     int  x;
 };
 
-int main() {
+auto main() -> int {
     CalS();
 }

@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <memory>
 #include <type_traits>
 #include <utility>
 
@@ -19,14 +20,14 @@ auto can_multiply(size_t n)
     -> decltype(std::declval<T>() * std::declval<N>(),
                 std::enable_if_t<std::is_integral<N>::value, int>{}, yes{});
 template <typename T, typename N>
-no can_multiply(...);
+auto can_multiply(...) -> no;
 
 template <typename T, typename N>
 auto can_add(size_t n)
     -> decltype(std::declval<T>() + std::declval<T>(),
                 std::enable_if_t<std::is_integral<N>::value, int>{}, yes{});
 template <typename T, typename N>
-no can_add(...);
+auto can_add(...) -> no;
 } // namespace TRAIT
 
 namespace IMPL {
@@ -79,13 +80,13 @@ auto increase(const T &x, const N &n) {
 }
 
 struct A {
-    A operator+(A b);
-    A operator+=(A b);
+    auto operator+(A b) -> A;
+    auto operator+=(A b) -> A;
 };
 struct B {};
 
 void Test_Can_Increase() {
-    int x, y;
+    int x = 0, y = 0;
     increase(x, y);
 
     A a;
