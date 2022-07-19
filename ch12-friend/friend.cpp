@@ -6,9 +6,8 @@ class C1 {
   public:
     C1(int x) : x_(x) { // NOLINT
     }
-    auto operator+(const C1 &rhs) const -> C1 {
-        return {x_ + rhs.x_};
-    }
+    // member funtion, cannot overload
+    auto operator+(const C1 &rhs) const -> C1 { return {x_ + rhs.x_}; }
 };
 
 void TestC1() {
@@ -60,6 +59,7 @@ void TestC1() {
     // C1<int> z1 = 2 + x;
 }
 
+// NOTE: best practice here
 template <typename T>
 class C2 {
     T x_;
@@ -67,6 +67,7 @@ class C2 {
   public:
     C2(T x) : x_(x) { // NOLINT
     }
+    // NOTE: only generate after class instantiation
     friend auto operator+(const C2 &lhs, const C2 &rhs) -> C2 {
         return C2(lhs.x_ + rhs.x_);
     }
@@ -80,34 +81,3 @@ void TestC2() {
 }
 
 } // namespace TEMPLATE
-
-namespace FRIEND_FACTORY {
-
-template <typename T>
-class B {
-  public:
-    friend auto operator!=(const T &lhs, const T &rhs) -> bool {
-        return !(lhs == rhs);
-    }
-    friend auto operator+(const T &lhs, const T &rhs) -> T {
-        return T(lhs += rhs);
-    }
-};
-
-template <typename T>
-class C : public B<C<T>> {
-    T x_;
-
-  public:
-    explicit C(T x) : x_(x) {
-    }
-
-    auto operator+=(const C &rhs) -> C {
-        return C(x_ + rhs.x_);
-    }
-    friend auto operator==(const C &lhs, const C &rhs) -> bool {
-        return lhs.x_ == rhs.x_;
-    }
-};
-
-} // namespace FRIEND_FACTORY
