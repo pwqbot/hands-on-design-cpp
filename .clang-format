@@ -7,7 +7,7 @@ Language: Cpp
 Standard: c++20
 AlignOperands: true 
 AllowShortLambdasOnASingleLine: Inline
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Inline
 AlignTrailingComments: true
 AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 AlignConsecutiveDeclarations: Consecutive
