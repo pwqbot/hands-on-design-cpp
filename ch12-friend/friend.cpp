@@ -4,16 +4,16 @@ class C1 {
     int x_;
 
   public:
-    C1(int x) : x_(x) {
+    C1(int x) : x_(x) { // NOLINT
     }
-    C1 operator+(const C1 &rhs) {
-        return C1(x_ + rhs.x_);
+    auto operator+(const C1 &rhs) const -> C1 {
+        return {x_ + rhs.x_};
     }
 };
 
 void TestC1() {
-    C1 x(1);
-    C1 z = x + 2;
+    const C1 x(1);
+    C1       z = x + 2;
     // C2 y = 2 + x; // error
 }
 
@@ -21,10 +21,10 @@ class C2 {
     int x_;
 
   public:
-    C2(int x) : x_(x) {
+    C2(int x) : x_(x) { // NOLINT
     }
-    friend C2 operator+(const C2 &lhs, const C2 &rhs) {
-        return C2(lhs.x_ + rhs.x_);
+    friend auto operator+(const C2 &lhs, const C2 &rhs) -> C2 {
+        return {lhs.x_ + rhs.x_};
     }
 };
 
@@ -44,10 +44,10 @@ class C1 {
     T x_;
 
   public:
-    C1(T x) : x_(x) {
+    C1(T x) : x_(x) { // NOLINT
     }
     template <typename U>
-    friend C1<U> operator+(const C1<U> &lhs, const C1<U> &rhs) {
+    friend auto operator+(const C1<U> &lhs, const C1<U> &rhs) -> C1<U> {
         return C1(lhs.x_ + rhs.x_);
     }
 };
@@ -65,9 +65,9 @@ class C2 {
     T x_;
 
   public:
-    C2(T x) : x_(x) {
+    C2(T x) : x_(x) { // NOLINT
     }
-    friend C2 operator+(const C2 &lhs, const C2 &rhs) {
+    friend auto operator+(const C2 &lhs, const C2 &rhs) -> C2 {
         return C2(lhs.x_ + rhs.x_);
     }
 };
@@ -86,10 +86,10 @@ namespace FRIEND_FACTORY {
 template <typename T>
 class B {
   public:
-    friend bool operator!=(const T &lhs, const T &rhs) {
+    friend auto operator!=(const T &lhs, const T &rhs) -> bool {
         return !(lhs == rhs);
     }
-    friend T operator+(const T &lhs, const T &rhs) {
+    friend auto operator+(const T &lhs, const T &rhs) -> T {
         return T(lhs += rhs);
     }
 };
@@ -99,13 +99,13 @@ class C : public B<C<T>> {
     T x_;
 
   public:
-    C(T x) : x_(x) {
+    explicit C(T x) : x_(x) {
     }
 
-    C operator+=(const C &rhs) {
+    auto operator+=(const C &rhs) -> C {
         return C(x_ + rhs.x_);
     }
-    friend bool operator==(const C &lhs, const C &rhs) {
+    friend auto operator==(const C &lhs, const C &rhs) -> bool {
         return lhs.x_ == rhs.x_;
     }
 };
